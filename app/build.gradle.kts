@@ -49,4 +49,8 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation("androidx.fragment:fragment-ktx:1.4.1")
+    androidTestImplementation("androidx.fragment:fragment-testing:1.4.1")
+    // dependency for viewModel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx")
+    implementation ("androidx.recyclerview:recyclerview")
 }
