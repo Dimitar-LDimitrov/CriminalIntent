@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dimitrov.criminalintent.CrimeListAdapter
 import com.dimitrov.criminalintent.CrimeListViewModel
 import com.dimitrov.criminalintent.databinding.FragmentCrimeListBinding
 
@@ -36,6 +37,10 @@ class CrimeListFragment : Fragment() {
         _binding = FragmentCrimeListBinding.inflate(inflater, container, false)
 
         binding.crimeListRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        val crimes = crimeListViewModel.crimes
+        val adapter = CrimeListAdapter(crimes)
+        binding.crimeListRecyclerView.adapter = adapter
 
         return binding.root
     }

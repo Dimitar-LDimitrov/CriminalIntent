@@ -2,6 +2,8 @@ package com.dimitrov.criminalintent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.dimitrov.criminalintent.fragments.CrimeDetailFragment
+import com.dimitrov.criminalintent.fragments.CrimeListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -9,10 +11,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val crimeDetailFragment: CrimeDetailFragment = CrimeDetailFragment()
+        val crimeListFragment = CrimeListFragment()
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.fragmentContainer, crimeDetailFragment)
+            .add(R.id.fragmentContainer, crimeListFragment)
             .commit()
     }
 }
