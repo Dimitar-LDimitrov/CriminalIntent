@@ -1,6 +1,7 @@
 package com.dimitrov.criminalintent
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,8 @@ class CrimeHolder(private val binding: ListItemCrimeBinding) :
     fun bind(crime: Crime) {
         binding.tvCrimeTitle.text = crime.title
         binding.tvCrimeDate.text = crime.date.toString()
+
+        binding.ivCrimeSolved.visibility = if (crime.requirePolice) View.VISIBLE else View.GONE
 
         binding.root.setOnClickListener {
             Toast.makeText(binding.root.context, "${crime.title} clicked!", Toast.LENGTH_SHORT)
