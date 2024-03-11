@@ -7,12 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dimitrov.criminalintent.CrimeListAdapter
 import com.dimitrov.criminalintent.CrimeListViewModel
 import com.dimitrov.criminalintent.databinding.FragmentCrimeListBinding
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-private const val TAG = "CrimeListFragment"
 class CrimeListFragment : Fragment() {
     // bind the layout
     private var _binding: FragmentCrimeListBinding? = null
@@ -21,13 +25,7 @@ class CrimeListFragment : Fragment() {
             "Cannot access binding because it is null. Is the view visible?"
         }
 
-
     private val crimeListViewModel: CrimeListViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "Total crimes: ${crimeListViewModel.crimes.size}")
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,10 +36,6 @@ class CrimeListFragment : Fragment() {
 
         binding.crimeListRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        val crimes = crimeListViewModel.crimes
-        val adapter = CrimeListAdapter(crimes)
-        binding.crimeListRecyclerView.adapter = adapter
-
         return binding.root
     }
 
@@ -49,5 +43,20 @@ class CrimeListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //repeatOnLifecycle(…) will begin executing your coroutine code when your fragment enters the
+        // started state and will continue running in the resumed state.
+        // But if your app is backgrounded and your fragment is no longer visible, repeatOnLifecycle(…) will
+        // cancel the work once the fragment falls from the started state to the created state.
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val crimes = crimeListViewModel.loadCrimes()
+                binding.crimeListRecyclerView.adapter = CrimeListAdapter(crimes)
+            }
+        }
     }
 }
